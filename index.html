@@ -227,8 +227,8 @@ if(!o.category||o.category==="__add__"||!o.by||o.by==="__add__"){toast("Choose a
 if(o.to<o.from){toast("The activity period ends before it starts.");return}
 o.action="submit";o.date=today();o.imgs=imgs.map(function(m){return{name:m.name,type:"image/jpeg",data:m.data}});o.doc=doc;
 var b=f.querySelector("button[type=submit]");b.disabled=true;b.textContent="Submitting…";
-post(o).then(function(j){if(!j.ok)throw 0;f.reset();imgs=[];doc=null;setDates();prevR();initAdds();toast("Highlight submitted");return refresh().then(function(){show("dash")})})
-.catch(function(){toast("Could not submit. Check your connection and try again.")}).then(function(){b.disabled=false;b.textContent="Submit highlight"})};
+post(o).then(function(j){if(!j.ok)throw new Error(j.error||"The web app did not accept the entry.");f.reset();imgs=[];doc=null;setDates();prevR();initAdds();toast("Highlight submitted");return refresh().then(function(){show("dash")})})
+.catch(function(err){var m=err&&err.message?err.message:"no response from the web app";toast("Could not submit.");$("#banner").textContent="Submit failed: "+m;console.error(err)}).then(function(){b.disabled=false;b.textContent="Submit highlight"})};
 var h=location.hash.slice(1);show(["dash","submit","list"].indexOf(h)>-1?h:"dash");refresh()}
 init();
 </script>
