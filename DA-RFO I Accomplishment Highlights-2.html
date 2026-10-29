@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DA-RFO I Accomplishment Highlights</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f6f1;--surface:#fff;--ink:#1c2a1f;--muted:#5b6a5e;--line:#d9dfd3;--brand:#2b6a3b;--brand-ink:#fff;--gold:#c8921a;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141a15;--surface:#1c241e;--ink:#e8eee6;--muted:#9aa89c;--line:#2e3a30;--brand:#6fbf84;--brand-ink:#10200f;--gold:#e0b04a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141a15;--surface:#1c241e;--ink:#e8eee6;--muted:#9aa89c;--line:#2e3a30;--brand:#6fbf84;--brand-ink:#10200f;--gold:#e0b04a;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 "Public Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","Public Sans",sans-serif;margin:0;line-height:1.15}
+header{background:var(--brand);color:var(--brand-ink);padding:18px 20px 0}
+.wrap{max-width:1080px;margin:0 auto}
+header h1{font-size:22px}
+header p{margin:2px 0 14px;opacity:.85;font-size:13px}
+nav{display:flex;gap:4px;overflow-x:auto}
+nav button{background:transparent;border:0;color:inherit;padding:10px 16px;font:600 14px "Public Sans",sans-serif;cursor:pointer;border-radius:8px 8px 0 0;opacity:.8}
+nav button[aria-selected="true"]{background:var(--bg);color:var(--ink);opacity:1}
+nav button:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+main{padding:22px 20px 60px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-bottom:18px}
+label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;color:var(--muted)}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 10px;min-width:0}
+textarea{min-height:110px;resize:vertical}
+.btn{background:var(--brand);color:var(--brand-ink);border:0;border-radius:8px;padding:10px 16px;font:600 14px "Public Sans",sans-serif;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:18px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px}
+.kpi b{display:block;font:700 28px "Bricolage Grotesque",sans-serif}
+.kpi span{color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:1.2fr 1fr;gap:14px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px}
+.panel h2{font-size:17px;margin-bottom:12px}
+.row{display:grid;grid-template-columns:minmax(110px,170px) 1fr 32px;gap:10px;align-items:center;margin:8px 0;font-size:13px}
+.track{background:var(--bg);border-radius:5px;height:16px;overflow:hidden}
+.fill{height:100%;border-radius:5px}
+.months{display:flex;align-items:flex-end;gap:6px;height:140px}
+.months div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;height:100%;font-size:11px;color:var(--muted)}
+.months i{display:block;width:100%;background:var(--brand);border-radius:4px 4px 0 0;min-height:2px}
+.card{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--c,var(--brand));border-radius:10px;padding:14px 16px;margin-bottom:12px}
+.card h3{font-size:17px;margin:4px 0}
+.meta{color:var(--muted);font-size:12.5px}
+.card p{margin:6px 0 0;max-width:72ch}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:99px;border:1px solid var(--line);margin-right:6px}
+form{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:760px}
+form .full{grid-column:1/-1}
+@media(max-width:640px){form{grid-template-columns:1fr}}
+.empty{color:var(--muted);padding:20px 0}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.on{opacity:1}
+.fld{display:flex;flex-direction:column;gap:6px}.addrow{display:flex;gap:6px}.addrow input{flex:1}
+.thumbs{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.thumbs img{width:110px;height:80px;object-fit:cover;border-radius:6px;border:1px solid var(--line);cursor:zoom-in}
+#lb{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;padding:20px;z-index:50;cursor:zoom-out}#lb.on{display:flex}#lb img{max-width:100%;max-height:100%;border-radius:8px}
+.docbtn{margin-top:10px}
+.cal-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}.cal-h .btn{padding:4px 14px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.cal .dow{font-size:11px;color:var(--muted);text-align:center}
+.cal button{background:var(--bg);border:2px solid transparent;border-radius:6px;min-height:52px;padding:4px;font:12px "Public Sans",sans-serif;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0}
+.cal button.today{border-color:var(--gold)}.cal button.sel{background:var(--brand);color:var(--brand-ink)}
+.dots{display:flex;gap:3px;flex-wrap:wrap;align-items:center}.dots i{width:8px;height:8px;border-radius:50%;display:block}
+#cDay{margin-top:12px;font-size:13px}
+.st{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 12px;margin:6px 0;border:1px solid var(--line);border-left:6px solid var(--c);border-radius:8px;font-size:13px}.st.no{border-style:dashed;border-left-style:solid;background:var(--bg)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>Accomplishment Highlights</h1>
+<p>DA-RFO I · submit what your division delivered and see the office picture</p>
+<nav role="tablist">
+<button role="tab" data-tab="dash" aria-selected="true">Dashboard</button>
+<button role="tab" data-tab="submit" aria-selected="false">Submit highlight</button>
+<button role="tab" data-tab="list" aria-selected="false">All highlights</button>
+</nav></div></header>
+<main><div class="wrap">
+
+<section id="dash">
+<div class="bar">
+<label>Year<select id="fYear"></select></label>
+<label>Quarter<select id="fQ"><option value="0">Whole year</option><option value="1">Q1</option><option value="2">Q2</option><option value="3">Q3</option><option value="4">Q4</option></select></label>
+</div>
+<div class="kpis" id="kpis"></div>
+<div class="grid">
+<div class="panel"><h2>Activity calendar</h2><div class="cal-h"><button class="btn ghost" id="cPrev" type="button" aria-label="Previous month">&lsaquo;</button><b id="cTitle"></b><button class="btn ghost" id="cNext" type="button" aria-label="Next month">&rsaquo;</button></div><div class="cal" id="cal"></div><div id="cDay" class="meta"></div></div>
+<div class="panel"><h2>Division submission status</h2><div id="status"></div></div>
+</div>
+<div class="grid">
+<div><div class="panel"><h2>Highlights by division</h2><div id="byDiv"></div></div>
+<div class="panel"><h2>Highlights by month</h2><div class="months" id="byMonth"></div></div></div>
+<div><div class="panel"><h2>By category</h2><div id="byCat"></div></div>
+<div class="panel"><h2>Latest submissions</h2><div id="latest"></div></div></div>
+</div>
+</section>
+
+<section id="submit" hidden>
+<form id="form">
+<label>Division<select name="division" required></select></label>
+<div class="fld"><label>Category<select name="category" id="fCat" required></select></label><div class="addrow" id="aCat" hidden><input id="nCat" placeholder="New category" maxlength="60" aria-label="New category name"><button class="btn" type="button" id="bCat">Add</button></div></div>
+<label class="full">Title of accomplishment<input name="title" required maxlength="120" placeholder="e.g. Distributed certified seeds to 350 farmers"></label>
+<label>Activity period from<input type="date" name="from" required></label>
+<label>Activity period to<input type="date" name="to" required></label>
+<label class="full">Summary<textarea name="summary" required maxlength="600" placeholder="What was done, who benefited, and what changed."></textarea></label>
+<label class="full">Accomplishment document (optional)<input type="file" id="fDoc" accept=".pdf,.docx"><span class="meta">PDF or Word (.docx), up to 10 MB.</span></label>
+<label class="full">Photos of the activity (optional)<input type="file" id="fImg" accept="image/*" multiple><span class="meta">Up to 3 photos. They are resized automatically.</span></label>
+<div class="full thumbs" id="prev"></div>
+<div class="fld"><label>Submitted by<select name="by" id="fBy" required></select></label><div class="addrow" id="aBy" hidden><input id="nBy" placeholder="Full name" maxlength="80" aria-label="New name"><button class="btn" type="button" id="bBy">Add</button></div></div>
+<div class="meta">The date submitted is recorded automatically.</div>
+<div class="full"><button class="btn" type="submit">Submit highlight</button></div>
+</form>
+</section>
+
+<section id="list" hidden>
+<div class="bar">
+<label>Division<select id="lDiv"></select></label>
+<label>Search<input id="lQ" type="search" placeholder="Title or summary"></label>
+<button class="btn ghost" id="csv" type="button">Download CSV</button>
+</div>
+<div id="items"></div>
+</section>
+</div></main>
+<div id="lb"><img alt="Enlarged activity photo"></div>
+<div id="toast" role="status"></div>
+
+<script>
+var DIVS=[["AFD","Admin and Finance","#2b6a3b"],["FOD","Field Operations","#c8921a"],["PMED","Planning, Monitoring and Evaluation","#2f6fa8"],["RAED","Regional Agricultural Engineering","#a8432f"],["AMAD","Agribusiness and Marketing Assistance","#7a4fa0"],["REG","Regulatory","#4f8a8b"],["RES","Research","#c2547a"],["PRDP","PRDP RPCO I","#8a7a2b"]];
+var CATS=["Service delivery","Infrastructure","Training and capacity building","Financial and procurement","Planning and monitoring","Other"];
+var KEY="dahl:v1",store=[],cats=[],names=[],imgs=[],doc=null;
+function lj(k,d){try{var r=localStorage.getItem(k);if(r)return JSON.parse(r)}catch(e){}return d}
+function sj(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+var dbp;function idb(){return dbp||(dbp=new Promise(function(res,rej){var r=indexedDB.open("dahl",1);r.onupgradeneeded=function(){r.result.createObjectStore("f")};r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)}}))}
+function fput(k,b){return idb().then(function(d){return new Promise(function(res,rej){var t=d.transaction("f","readwrite");t.objectStore("f").put(b,k);t.oncomplete=res;t.onerror=function(){rej(t.error)}})})}
+function fget(k){return idb().then(function(d){return new Promise(function(res,rej){var q=d.transaction("f").objectStore("f").get(k);q.onsuccess=function(){res(q.result)};q.onerror=function(){rej(q.error)}})})}
+function uid(){return"f"+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function shrink(file){return new Promise(function(res,rej){var im=new Image(),u=URL.createObjectURL(file);im.onload=function(){var s=Math.min(1,1000/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);c.toBlob(function(b){b?res(b):rej()},"image/jpeg",.78)};im.onerror=function(){rej()};im.src=u})}
+function hydrate(){document.querySelectorAll("img[data-k]:not([src])").forEach(function(im){fget(im.dataset.k).then(function(b){if(b)im.src=URL.createObjectURL(b)}).catch(function(){})})}
+function prevR(){var p=$("#prev");p.innerHTML=imgs.map(function(k){return'<img data-k="'+k+'" alt="Selected photo">'}).join("")+(doc?'<span class="meta">Document: '+esc(doc.name)+"</span>":"");hydrate()}
+function dl(name,data){if(!window.claude){toast("Downloads are not available here.");return}return claude.use("downloads").then(function(d){if(!d){toast("Downloads are not available here.");return}return d.save({filename:name,data:data}).catch(function(e){if(!e||e.code!=="declined")toast("Could not save the file.")})})}
+function setDates(){var t=today(),f=document.forms[0];f.from.value=t;f.to.value=t}
+function fillSel(sel,arr,ph,al){var cur=sel.value;sel.innerHTML='<option value="">'+ph+"</option>"+arr.map(function(a){return"<option>"+esc(a)+"</option>"}).join("")+'<option value="__add__">'+al+"</option>";if(arr.indexOf(cur)>-1)sel.value=cur}
+function addable(sid,rid,iid,bid,arr,key,ph,al){var s=$("#"+sid),r=$("#"+rid),i=$("#"+iid);fillSel(s,arr,ph,al);
+s.onchange=function(){r.hidden=s.value!=="__add__";if(!r.hidden)i.focus()};
+i.onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();$("#"+bid).click()}};
+$("#"+bid).onclick=function(){var v=i.value.trim();if(!v)return;if(arr.indexOf(v)<0){arr.push(v);sj(key,arr)}fillSel(s,arr,ph,al);s.value=v;i.value="";r.hidden=true}}
+function initAdds(){addable("fCat","aCat","nCat","bCat",cats,"dahl:cats","Select a category","+ Add new category");addable("fBy","aBy","nBy","bBy",names,"dahl:names","Select your name","+ Add new name")}
+function load(){try{var r=localStorage.getItem(KEY);if(r)return JSON.parse(r)}catch(e){}return null}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}}
+function seed(){var y=new Date().getFullYear();return [
+{id:1,division:"FOD",category:"Service delivery",title:"Sample: Seed distribution to farmer cooperatives",date:y+"-02-12",location:"Ilocos Norte",beneficiaries:350,amount:1250000,summary:"Sample entry. Replace or clear it after your first real submission.",by:"Sample"},
+{id:2,division:"AFD",category:"Financial and procurement",title:"Sample: Cleared liquidation backlog for fuel receipts",date:y+"-03-20",location:"San Fernando, La Union",beneficiaries:0,amount:0,summary:"Sample entry showing a finance accomplishment.",by:"Sample"},
+{id:3,division:"PRDP",category:"Infrastructure",title:"Sample: Farm-to-market road completed",date:y+"-05-08",location:"Pangasinan",beneficiaries:1200,amount:18500000,summary:"Sample entry showing an infrastructure accomplishment.",by:"Sample"}]}
+function $(s){return document.querySelector(s)}
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function dv(c){return DIVS.filter(function(d){return d[0]==c})[0]||[c,c,"#888"]}
+function fmt(n){return Number(n||0).toLocaleString("en-PH")}
+function php(n){n=Number(n||0);return n>=1e6?"₱"+(n/1e6).toFixed(1)+"M":"₱"+fmt(n)}
+function toast(m){var t=$("#toast");t.textContent=m;t.className="on";setTimeout(function(){t.className=""},2200)}
+
+function opts(sel,arr,all){sel.innerHTML=(all?'<option value="">All divisions</option>':"")+arr.map(function(a){return Array.isArray(a)?'<option value="'+a[0]+'">'+esc(a[1])+"</option>":'<option>'+esc(a)+"</option>"}).join("")}
+
+function filtered(){var y=+$("#fYear").value,q=+$("#fQ").value;return store.filter(function(e){var d=new Date(e.date);if(d.getFullYear()!==y)return false;return !q||Math.floor(d.getMonth()/3)+1===q})}
+function bars(el,rows,max){el.innerHTML=rows.length?rows.map(function(r){return'<div class="row"><span>'+esc(r[0])+'</span><div class="track"><div class="fill" style="width:'+(max?r[1]/max*100:0)+"%;background:"+r[2]+'"></div></div><b>'+r[1]+"</b></div>"}).join(""):'<div class="empty">No highlights in this period yet.</div>'}
+
+function dash(){var d=filtered();
+var nd=d.filter(function(e){return e.doc}).length,np=d.reduce(function(a,e){return a+(e.imgs?e.imgs.length:0)},0);
+var active=new Set(d.map(function(e){return e.division})).size;
+$("#kpis").innerHTML=[[d.length,"Highlights submitted"],[active+" of "+DIVS.length,"Divisions reporting"],[nd,"With documents"],[np,"Photos uploaded"]].map(function(k){return'<div class="kpi"><b>'+k[0]+"</b><span>"+k[1]+"</span></div>"}).join("");
+var rows=DIVS.map(function(x){return[x[0]+" · "+x[1].split(" ")[0],d.filter(function(e){return e.division===x[0]}).length,x[2]]});
+bars($("#byDiv"),rows,Math.max.apply(null,rows.map(function(r){return r[1]}).concat([1])));
+var cr=cats.map(function(c){return[c,d.filter(function(e){return e.category===c}).length,"var(--brand)"]}).filter(function(r){return r[1]});
+bars($("#byCat"),cr,Math.max.apply(null,cr.map(function(r){return r[1]}).concat([1])));
+var m=new Array(12).fill(0);d.forEach(function(e){m[new Date(e.date).getMonth()]++});var mx=Math.max.apply(null,m.concat([1]));
+var mn=["J","F","M","A","M","J","J","A","S","O","N","D"];
+$("#byMonth").innerHTML=m.map(function(v,i){return"<div><span>"+(v||"")+'</span><i style="height:'+(v/mx*100)+'%"></i><span>'+mn[i]+"</span></div>"}).join("");
+status(d);cal();var l=d.slice().sort(function(a,b){return b.date.localeCompare(a.date)}).slice(0,4);
+$("#latest").innerHTML=l.length?l.map(function(e){return'<div style="margin:0 0 10px"><b>'+esc(e.title)+'</b><div class="meta">'+esc(dv(e.division)[1])+" · "+esc(e.date)+"</div></div>"}).join(""):'<div class="empty">Nothing yet. Use Submit highlight to add the first one.</div>'}
+
+function list(){var dd=$("#lDiv").value,q=$("#lQ").value.toLowerCase();
+var r=store.filter(function(e){return(!dd||e.division===dd)&&(!q||(e.title+" "+e.summary).toLowerCase().indexOf(q)>-1)}).sort(function(a,b){return b.date.localeCompare(a.date)});
+$("#items").innerHTML=r.length?r.map(function(e){var x=dv(e.division);return'<article class="card" style="--c:'+x[2]+'"><div class="meta"><span class="tag">'+esc(x[0])+'</span><span class="tag">'+esc(e.category)+"</span>"+"Submitted "+esc(e.date)+(e.from?" · Activity "+esc(e.from)+" to "+esc(e.to||e.from):"")+"</div><h3>"+esc(e.title)+"</h3><p>"+esc(e.summary)+'</p>'+(e.imgs&&e.imgs.length?'<div class="thumbs" style="margin-top:10px">'+e.imgs.map(function(k){return'<img data-k="'+esc(k)+'" alt="Activity photo">'}).join("")+"</div>":"")+(e.doc?'<button class="btn ghost docbtn" type="button" data-doc="'+esc(e.doc.id)+'" data-name="'+esc(e.doc.name)+'">Download '+esc(e.doc.name)+"</button>":"")+'<div class="meta" style="margin-top:8px">Submitted by '+esc(e.by)+"</div></article>"}).join(""):'<div class="empty">No highlights match. Clear the search or pick another division.</div>';hydrate()}
+
+var cm=new Date(),csel="";cm.setDate(1);
+function iso(y,m,d){return y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0")}
+function today(){var n=new Date();return iso(n.getFullYear(),n.getMonth(),n.getDate())}
+function span(e){var a=e.from||e.date;return[a,e.to||a]}
+function onDay(k){return store.filter(function(e){var s=span(e);return s[0]<=k&&k<=s[1]})}
+function cal(){var y=cm.getFullYear(),m=cm.getMonth(),first=new Date(y,m,1).getDay(),n=new Date(y,m+1,0).getDate(),t=today();
+$("#cTitle").textContent=cm.toLocaleString("en-PH",{month:"long",year:"numeric"});
+var h=["Su","Mo","Tu","We","Th","Fr","Sa"].map(function(x){return'<div class="dow">'+x+"</div>"}).join("");
+for(var i=0;i<first;i++)h+="<span></span>";
+for(var d=1;d<=n;d++){var k=iso(y,m,d),es=onDay(k),ds=[];es.forEach(function(e){if(ds.indexOf(e.division)<0)ds.push(e.division)});
+h+='<button type="button" data-d="'+k+'" class="'+(k===t?"today ":"")+(k===csel?"sel":"")+'" aria-label="'+k+", "+es.length+' activities"><span>'+d+'</span><span class="dots">'+ds.slice(0,4).map(function(c){return'<i style="background:'+dv(c)[2]+'"></i>'}).join("")+(es.length?"<small>"+es.length+"</small>":"")+"</span></button>"}
+$("#cal").innerHTML=h;calDay()}
+function calDay(){var el=$("#cDay");if(!csel){el.textContent="Select a day to see the activities running on it.";return}
+var es=onDay(csel);el.innerHTML="<b>"+esc(csel)+"</b>"+(es.length?es.map(function(e){var x=dv(e.division);return'<div style="margin:6px 0;padding-left:8px;border-left:4px solid '+x[2]+'"><span style="color:var(--ink)">'+esc(e.title)+"</span><br>"+esc(x[1])+"</div>"}).join(""):"<div>No activities on this day.</div>")}
+function status(d){var rows=DIVS.map(function(x){var es=d.filter(function(e){return e.division===x[0]}).sort(function(a,b){return b.date.localeCompare(a.date)});return{x:x,n:es.length,last:es[0]&&es[0].date}});
+rows.sort(function(a,b){return(a.n>0)-(b.n>0)});var miss=rows.filter(function(r){return!r.n}).length;
+$("#status").innerHTML='<p class="meta" style="margin:0 0 8px">'+(miss?miss+" of "+DIVS.length+" divisions have not submitted yet for this period.":"All divisions have submitted for this period.")+"</p>"+rows.map(function(r){return'<div class="st'+(r.n?"":" no")+'" style="--c:'+r.x[2]+'"><span>'+esc(r.x[1])+"</span><b>"+(r.n?r.n+" submitted · last "+esc(r.last):"Not yet submitted")+"</b></div>"}).join("")}
+function show(t){["dash","submit","list"].forEach(function(s){$("#"+s).hidden=s!==t});
+document.querySelectorAll("nav button").forEach(function(b){b.setAttribute("aria-selected",b.dataset.tab===t)});
+if(t==="dash")dash();if(t==="list")list();try{history.replaceState(null,"","#"+t)}catch(e){}}
+
+function init(){store=load()||seed();save();cats=lj("dahl:cats",null)||CATS.slice();names=lj("dahl:names",null)||[];
+store.forEach(function(e){if(e.category&&cats.indexOf(e.category)<0)cats.push(e.category);if(e.by&&e.by!=="Sample"&&names.indexOf(e.by)<0)names.push(e.by)});
+var f=document.forms[0];opts(f.division,DIVS);opts($("#lDiv"),DIVS,true);initAdds();
+var y=new Date().getFullYear(),ys=[];for(var i=y;i>=y-3;i--)ys.push(String(i));
+$("#fYear").innerHTML=ys.map(function(v){return"<option>"+v+"</option>"}).join("");
+setDates();
+document.querySelectorAll("nav button").forEach(function(b){b.onclick=function(){show(b.dataset.tab)}});
+$("#fYear").onchange=$("#fQ").onchange=dash;$("#lDiv").onchange=$("#lQ").oninput=list;
+f.onsubmit=function(ev){ev.preventDefault();var o={id:Date.now()};new FormData(f).forEach(function(v,k){o[k]=v});
+if(!o.category||o.category==="__add__"||!o.by||o.by==="__add__"){toast("Choose a category and your name, or add a new one.");return}
+if(o.to<o.from){toast("The activity period ends before it starts.");return}
+o.date=today();o.imgs=imgs.slice();if(doc)o.doc=doc;
+store.push(o);save();f.reset();imgs=[];doc=null;setDates();prevR();initAdds();toast("Highlight submitted");show("dash")};
+$("#fImg").onchange=function(){var inp=this,fs=Array.prototype.slice.call(inp.files).slice(0,3-imgs.length);inp.value="";if(!fs.length){toast("You can add up to 3 photos.");return}Promise.all(fs.map(function(x){return shrink(x).then(function(b){var k=uid();return fput(k,b).then(function(){imgs.push(k)})})})).then(prevR).catch(function(){toast("A photo could not be read. Use a JPG or PNG file.")})};
+$("#fDoc").onchange=function(){var inp=this,x=inp.files[0];if(!x)return;if(!/\.(pdf|docx)$/i.test(x.name)){toast("Use a PDF or Word (.docx) file.");inp.value="";return}if(x.size>10485760){toast("The document is over 10 MB.");inp.value="";return}var k=uid();fput(k,x).then(function(){doc={id:k,name:x.name};prevR()}).catch(function(){toast("The document could not be saved in this browser.")})};
+$("#items").onclick=function(e){var t=e.target;if(t.tagName==="IMG"&&t.src){$("#lb img").src=t.src;$("#lb").className="on"}var b=t.closest&&t.closest("[data-doc]");if(b)fget(b.dataset.doc).then(function(x){return dl(b.dataset.name,x)}).catch(function(){toast("The document is not available in this browser.")})};
+$("#lb").onclick=function(){this.className=""};
+$("#cPrev").onclick=function(){cm.setMonth(cm.getMonth()-1);cal()};$("#cNext").onclick=function(){cm.setMonth(cm.getMonth()+1);cal()};
+$("#cal").onclick=function(e){var b=e.target.closest("button[data-d]");if(b){csel=b.dataset.d;cal()}};
+$("#csv").onclick=function(){var h=["division","category","title","date","from","to","summary","by"];
+var c=[h.join(",")].concat(store.map(function(e){return h.map(function(k){return'"'+String(e[k]==null?"":e[k]).replace(/"/g,'""')+'"'}).join(",")})).join("\n");
+dl("accomplishment-highlights.csv",c)};
+var h=location.hash.slice(1);show(["dash","submit","list"].indexOf(h)>-1?h:"dash")}
+init();
+</script>
+</body>
+</html>
