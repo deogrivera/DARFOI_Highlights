@@ -65,6 +65,11 @@ form .full{grid-column:1/-1}
 #cDay{margin-top:12px;font-size:13px}
 .st{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 12px;margin:6px 0;border:1px solid var(--line);border-left:6px solid var(--c);border-radius:8px;font-size:13px}.st.no{border-style:dashed;border-left-style:solid;background:var(--bg)}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+#progBar{height:100%;width:0;background:var(--brand);border-radius:5px;transition:width .2s}
+#progBar.busy{width:100%!important;background:linear-gradient(90deg,var(--brand) 0 30%,var(--gold) 50%,var(--brand) 70% 100%);background-size:200% 100%;animation:sl 1.2s linear infinite}
+@keyframes sl{to{background-position:-200% 0}}
+@media(prefers-reduced-motion:reduce){#progBar.busy{animation:none}}
+.err{margin-top:12px;border:1px solid #b3261e;border-left-width:6px;border-radius:8px;padding:10px 12px;background:#fdecea;color:#5c1410;font-size:14px;overflow-wrap:anywhere}.err .meta{color:#5c1410;margin-top:6px}
 </style>
 </head>
 <body>
@@ -109,7 +114,9 @@ form .full{grid-column:1/-1}
 <div class="full thumbs" id="prev"></div>
 <div class="fld"><label>Submitted by<select name="by" id="fBy" required></select></label><div class="addrow" id="aBy" hidden><input id="nBy" placeholder="Full name" maxlength="80" aria-label="New name"><button class="btn" type="button" id="bBy">Add</button></div></div>
 <div class="meta">The date submitted is recorded automatically.</div>
-<div class="full"><button class="btn" type="submit">Submit highlight</button></div>
+<div class="full"><button class="btn" type="submit">Submit highlight</button>
+<div id="prog" hidden style="margin-top:12px"><div class="track"><div id="progBar"></div></div><div class="meta" id="progTxt" style="margin-top:6px"></div></div>
+<div id="subErr" class="err" hidden role="alert"></div></div>
 </form>
 </section>
 
@@ -202,6 +209,22 @@ function show(t){tab=t;["dash","submit","list"].forEach(function(s){$("#"+s).hid
 document.querySelectorAll("nav button").forEach(function(b){b.setAttribute("aria-selected",b.dataset.tab===t)});
 if(t==="dash")dash();if(t==="list")list();try{history.replaceState(null,"","#"+t)}catch(e){}}
 
+function prog(p,label,busy){var w=$("#prog");if(p<0){w.hidden=true;return}w.hidden=false;var b=$("#progBar");b.style.width=(p*100)+"%";b.className=busy?"busy":"";$("#progTxt").textContent=label}
+function hint(m){m=m.toLowerCase();
+if(m.indexOf("network")>-1||m.indexOf("failed to fetch")>-1)return"The page could not reach the web app. Check your internet connection, and that the web app is deployed with access set to Anyone.";
+if(m.indexOf("not json")>-1||m.indexOf("unexpected token")>-1)return"The web app returned a web page instead of data. Redeploy it as a New version with access set to Anyone.";
+if(m.indexOf("drive")>-1||m.indexOf("folder")>-1||m.indexOf("permission")>-1||m.indexOf("access")>-1)return"The script could not use the Drive folder. Run testSetup in Apps Script, approve the permissions, then redeploy a new version.";
+if(m.indexOf("spreadsheet")>-1||m.indexOf("sheet")>-1)return"The script could not open the Google Sheet. Check the Sheet ID in Code.gs.";
+if(m.indexOf("server:")>-1)return"The web app reported an error. Open Executions in Apps Script to see the details.";
+return"Send this message to the person who maintains the system."}
+function errR(m){var e=$("#subErr");e.textContent="";if(!m){e.hidden=true;return}e.hidden=false;
+var t=document.createElement("b");t.textContent="Could not submit.";e.appendChild(t);
+var r=document.createElement("div");r.textContent="Reason: "+m;e.appendChild(r);
+var h=document.createElement("div");h.className="meta";h.textContent=hint(m);e.appendChild(h)}
+function send(o,onUp,onWait){return new Promise(function(res,rej){var x=new XMLHttpRequest();x.open("POST",API);x.setRequestHeader("Content-Type","text/plain;charset=utf-8");x.timeout=180000;
+x.upload.onprogress=function(e){if(e.lengthComputable)onUp(e.loaded/e.total)};x.upload.onload=onWait;
+x.onerror=function(){rej(new Error("Network error: could not reach the web app."))};x.ontimeout=function(){rej(new Error("Network error: the request timed out."))};
+x.onload=function(){try{res(JSON.parse(x.responseText))}catch(e){rej(new Error("The response was not JSON (status "+x.status+")."))}};x.send(JSON.stringify(o))})}
 function init(){var f=document.forms[0];opts(f.division,DIVS);opts($("#lDiv"),DIVS,true);initAdds();
 var y=new Date().getFullYear(),ys=[];for(var i=y;i>=y-3;i--)ys.push(String(i));
 $("#fYear").innerHTML=ys.map(function(v){return"<option>"+v+"</option>"}).join("");setDates();
@@ -226,9 +249,11 @@ var o={};new FormData(f).forEach(function(v,k){o[k]=v});
 if(!o.category||o.category==="__add__"||!o.by||o.by==="__add__"){toast("Choose a category and your name, or add a new one.");return}
 if(o.to<o.from){toast("The activity period ends before it starts.");return}
 o.action="submit";o.date=today();o.imgs=imgs.map(function(m){return{name:m.name,type:"image/jpeg",data:m.data}});o.doc=doc;
-var b=f.querySelector("button[type=submit]");b.disabled=true;b.textContent="Submitting…";
-post(o).then(function(j){if(!j.ok)throw new Error(j.error||"The web app did not accept the entry.");f.reset();imgs=[];doc=null;setDates();prevR();initAdds();toast("Highlight submitted");return refresh().then(function(){show("dash")})})
-.catch(function(err){var m=err&&err.message?err.message:"no response from the web app";toast("Could not submit.");$("#banner").textContent="Submit failed: "+m;console.error(err)}).then(function(){b.disabled=false;b.textContent="Submit highlight"})};
+var b=f.querySelector("button[type=submit]");b.disabled=true;b.textContent="Submitting…";errR("");prog(0,"Preparing…");
+send(o,function(p){prog(p,"Uploading… "+Math.round(p*100)+"%")},function(){prog(1,"Saving to Google Drive and the Sheet… please wait",true)})
+.then(function(j){if(!j||!j.ok)throw new Error(j&&j.error?"Server: "+j.error:"The web app did not accept the entry.");prog(1,"Done");f.reset();imgs=[];doc=null;setDates();prevR();initAdds();toast("Highlight submitted");return refresh().then(function(){show("dash")})})
+.catch(function(err){prog(-1);errR(err&&err.message?err.message:"No response from the web app.");console.error(err)})
+.then(function(){b.disabled=false;b.textContent="Submit highlight";setTimeout(function(){if(!$("#subErr").textContent)prog(-1)},900)})};
 var h=location.hash.slice(1);show(["dash","submit","list"].indexOf(h)>-1?h:"dash");refresh()}
 init();
 </script>
