@@ -25,7 +25,7 @@ main{padding:22px 20px 60px}
 .bar{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-bottom:18px}
 label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;color:var(--muted)}
 input,select,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 10px;min-width:0}
-textarea{min-height:110px;resize:vertical}
+textarea{min-height:240px;resize:vertical}
 .btn{background:var(--brand);color:var(--brand-ink);border:0;border-radius:8px;padding:10px 16px;font:600 14px "Public Sans",sans-serif;cursor:pointer}
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:18px}
@@ -45,7 +45,7 @@ textarea{min-height:110px;resize:vertical}
 .card{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--c,var(--brand));border-radius:10px;padding:14px 16px;margin-bottom:12px}
 .card h3{font-size:17px;margin:4px 0}
 .meta{color:var(--muted);font-size:12.5px}
-.card p{margin:6px 0 0;max-width:72ch}
+.card p{margin:6px 0 0;max-width:72ch;white-space:pre-line}
 .tag{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:99px;border:1px solid var(--line);margin-right:6px}
 form{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:760px}
 form .full{grid-column:1/-1}
@@ -103,7 +103,7 @@ form .full{grid-column:1/-1}
 <label class="full">Title of accomplishment<input name="title" required maxlength="120" placeholder="e.g. Distributed certified seeds to 350 farmers"></label>
 <label>Activity period from<input type="date" name="from" required></label>
 <label>Activity period to<input type="date" name="to" required></label>
-<label class="full">Summary<textarea name="summary" required maxlength="600" placeholder="What was done, who benefited, and what changed."></textarea></label>
+<label class="full">Summary<textarea name="summary" required maxlength="20000" placeholder="Write the full report here. Line breaks and paragraphs are kept."></textarea></label>
 <label class="full">Accomplishment document (optional)<input type="file" id="fDoc" accept=".pdf,.docx"><span class="meta">PDF or Word (.docx), up to 10 MB.</span></label>
 <label class="full">Photos of the activity (optional)<input type="file" id="fImg" accept="image/*" multiple><span class="meta">Up to 3 photos. They are resized automatically.</span></label>
 <div class="full thumbs" id="prev"></div>
@@ -127,7 +127,7 @@ form .full{grid-column:1/-1}
 
 <script>
 /* 1. Paste your Apps Script web app URL between the quotes (see setup steps). */
-var API="https://script.google.com/macros/s/AKfycbx4RPP-riYZDwzHNZ2ekUrH7nDBJedsPfIlijjCx3qqltbgw-aYpC4gyGuyAfRqp3ca6w/exec";
+var API="https://script.google.com/macros/s/AKfycbxswTepKeFWvvVOewBYC_q-_z1sjCx6J76B3bAB9SWTdXfLbnEPt8lP2JCGxu3N4RdJVw/exec";
 
 var DIVS=[["AFD","Admin and Finance","#2b6a3b"],["FOD","Field Operations","#c8921a"],["PMED","Planning, Monitoring and Evaluation","#2f6fa8"],["RAED","Regional Agricultural Engineering","#a8432f"],["AMAD","Agribusiness and Marketing Assistance","#7a4fa0"],["REG","Regulatory","#4f8a8b"],["RES","Research","#c2547a"],["PRDP","PRDP RPCO I","#8a7a2b"]];
 var CATS=["Service delivery","Infrastructure","Training and capacity building","Financial and procurement","Planning and monitoring","Other"];
