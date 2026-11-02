@@ -225,6 +225,7 @@ function send(o,onUp,onWait){return new Promise(function(res,rej){var x=new XMLH
 x.upload.onprogress=function(e){if(e.lengthComputable)onUp(e.loaded/e.total)};x.upload.onload=onWait;
 x.onerror=function(){rej(new Error("Network error: could not reach the web app."))};x.ontimeout=function(){rej(new Error("Network error: the request timed out."))};
 x.onload=function(){try{res(JSON.parse(x.responseText))}catch(e){rej(new Error("The response was not JSON (status "+x.status+")."))}};x.send(JSON.stringify(o))})}
+function verify(id){return new Promise(function(r){setTimeout(r,3000)}).then(function(){return fetch(API+"?action=list")}).then(function(r){return r.json()}).then(function(j){return(j.entries||[]).some(function(e){return e.id===id})}).catch(function(){return false})}
 function init(){var f=document.forms[0];opts(f.division,DIVS);opts($("#lDiv"),DIVS,true);initAdds();
 var y=new Date().getFullYear(),ys=[];for(var i=y;i>=y-3;i--)ys.push(String(i));
 $("#fYear").innerHTML=ys.map(function(v){return"<option>"+v+"</option>"}).join("");setDates();
@@ -248,9 +249,10 @@ f.onsubmit=function(ev){ev.preventDefault();if(!connected()){toast("Connect the 
 var o={};new FormData(f).forEach(function(v,k){o[k]=v});
 if(!o.category||o.category==="__add__"||!o.by||o.by==="__add__"){toast("Choose a category and your name, or add a new one.");return}
 if(o.to<o.from){toast("The activity period ends before it starts.");return}
-o.action="submit";o.date=today();o.imgs=imgs.map(function(m){return{name:m.name,type:"image/jpeg",data:m.data}});o.doc=doc;
+o.action="submit";o.id="h"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);o.date=today();o.imgs=imgs.map(function(m){return{name:m.name,type:"image/jpeg",data:m.data}});o.doc=doc;
 var b=f.querySelector("button[type=submit]");b.disabled=true;b.textContent="Submitting…";errR("");prog(0,"Preparing…");
 send(o,function(p){prog(p,"Uploading… "+Math.round(p*100)+"%")},function(){prog(1,"Saving to Google Drive and the Sheet… please wait",true)})
+.catch(function(err){if(!/network/i.test(err.message))throw err;prog(1,"Checking whether the entry was saved…",true);return verify(o.id).then(function(ok){if(ok)return{ok:true};throw err})})
 .then(function(j){if(!j||!j.ok)throw new Error(j&&j.error?"Server: "+j.error:"The web app did not accept the entry.");prog(1,"Done");f.reset();imgs=[];doc=null;setDates();prevR();initAdds();toast("Highlight submitted");return refresh().then(function(){show("dash")})})
 .catch(function(err){prog(-1);errR(err&&err.message?err.message:"No response from the web app.");console.error(err)})
 .then(function(){b.disabled=false;b.textContent="Submit highlight";setTimeout(function(){if(!$("#subErr").textContent)prog(-1)},900)})};
