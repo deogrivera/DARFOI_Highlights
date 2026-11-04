@@ -65,12 +65,18 @@ form .full{grid-column:1/-1}
 #cDay{margin-top:12px;font-size:13px}
 .st{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 12px;margin:6px 0;border:1px solid var(--line);border-left:6px solid var(--c);border-radius:8px;font-size:13px}.st.no{border-style:dashed;border-left-style:solid;background:var(--bg)}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
-#progBar{height:100%;width:0;background:var(--brand);border-radius:5px;transition:width .2s}
-#progBar.busy{width:100%!important;background:linear-gradient(90deg,var(--brand) 0 30%,var(--gold) 50%,var(--brand) 70% 100%);background-size:200% 100%;animation:sl 1.2s linear infinite}
+#progBar,#dBar{height:100%;width:0;background:var(--brand);border-radius:5px;transition:width .2s}
+#progBar.busy,#dBar.busy{width:100%!important;background:linear-gradient(90deg,var(--brand) 0 30%,var(--gold) 50%,var(--brand) 70% 100%);background-size:200% 100%;animation:sl 1.2s linear infinite}
 @keyframes sl{to{background-position:-200% 0}}
-@media(prefers-reduced-motion:reduce){#progBar.busy{animation:none}}
+@media(prefers-reduced-motion:reduce){#progBar.busy,#dBar.busy{animation:none}}
 .err{margin-top:12px;border:1px solid #b3261e;border-left-width:6px;border-radius:8px;padding:10px 12px;background:#fdecea;color:#5c1410;font-size:14px;overflow-wrap:anywhere}.err .meta{color:#5c1410;margin-top:6px}
 </style>
+<script>
+/* Loads the PowerPoint library; tries another host if one is blocked or unavailable. */
+(function(){var u=["https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js","https://unpkg.com/pptxgenjs@3.12.0/dist/pptxgen.bundle.js","https://cdnjs.cloudflare.com/ajax/libs/pptxgenjs/3.12.0/pptxgen.bundle.js"],i=0;
+window.loadPptx=function(cb){if(window.PptxGenJS)return cb&&cb(true);if(i>=u.length)return cb&&cb(false);var s=document.createElement("script");s.src=u[i++];s.onload=function(){cb&&cb(!!window.PptxGenJS)};s.onerror=function(){window.loadPptx(cb)};document.head.appendChild(s)};
+window.loadPptx()})();
+</script>
 </head>
 <body>
 <header><div class="wrap">
@@ -80,6 +86,7 @@ form .full{grid-column:1/-1}
 <button role="tab" data-tab="dash" aria-selected="true">Dashboard</button>
 <button role="tab" data-tab="submit" aria-selected="false">Submit highlight</button>
 <button role="tab" data-tab="list" aria-selected="false">All highlights</button>
+<button role="tab" data-tab="deck" aria-selected="false">Presentation</button>
 </nav></div></header>
 <main><div class="wrap"><p id="banner" class="meta" role="status"></p>
 
@@ -104,7 +111,8 @@ form .full{grid-column:1/-1}
 <section id="submit" hidden>
 <form id="form">
 <label>Division<select name="division" required></select></label>
-<div class="fld"><label>Category<select name="category" id="fCat" required></select></label><div class="addrow" id="aCat" hidden><input id="nCat" placeholder="New category" maxlength="60" aria-label="New category name"><button class="btn" type="button" id="bCat">Add</button></div></div>
+<div class="fld"><label>Banner / Section / Unit<select name="section" id="fSec"></select></label><div class="addrow" id="aSec" hidden><input id="nSec" placeholder="New banner / section / unit" maxlength="80" aria-label="New section or unit name"><button class="btn" type="button" id="bSec">Add</button></div></div>
+<div class="fld full"><label>Category<select name="category" id="fCat" required></select></label><div class="addrow" id="aCat" hidden><input id="nCat" placeholder="New category" maxlength="60" aria-label="New category name"><button class="btn" type="button" id="bCat">Add</button></div></div>
 <label class="full">Title of accomplishment<input name="title" required maxlength="120" placeholder="e.g. Distributed certified seeds to 350 farmers"></label>
 <label>Activity period from<input type="date" name="from" required></label>
 <label>Activity period to<input type="date" name="to" required></label>
@@ -128,40 +136,63 @@ form .full{grid-column:1/-1}
 </div>
 <div id="items"></div>
 </section>
+<section id="deck" hidden>
+<div id="deckLock" class="panel" style="max-width:460px"><h2>Reports are restricted</h2>
+<p class="meta" style="margin-top:0">Only authorized report officers can create the presentation. Enter the report passcode to continue.</p>
+<div class="addrow"><input id="dPass" type="password" autocomplete="off" placeholder="Report passcode" aria-label="Report passcode"><button class="btn" id="dUnlock" type="button">Unlock</button></div>
+<p id="dLockMsg" class="meta" style="margin-bottom:0" role="status"></p></div>
+<div id="deckBody" hidden>
+<div class="bar">
+<label>Activity period from<input type="date" id="dFrom"></label>
+<label>Activity period to<input type="date" id="dTo"></label>
+<label>Division<select id="dDiv"></select></label>
+<label>Summary length<select id="dLen"><option value="350">Short</option><option value="700" selected>Standard</option><option value="1400">Long</option></select></label>
+</div>
+<label style="flex-direction:row;align-items:center;gap:8px;margin-bottom:14px"><input type="checkbox" id="dPhotos" checked> Include photos</label>
+<div class="panel"><h2>Create a PowerPoint</h2>
+<p id="dInfo" class="meta" style="margin-top:0"></p>
+<p class="meta">Leave both dates empty to include every highlight. A highlight is included when its activity period overlaps your dates. Long summaries are shortened on the slide, so the full report stays in the submission.</p>
+<button class="btn" id="dGo" type="button">Generate PowerPoint</button>
+<div id="dBarW" hidden style="margin-top:12px"><div class="track"><div id="dBar"></div></div></div><div id="dProg" class="meta" style="margin-top:8px" role="status"></div><div id="dLinks" style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap"></div><p class="meta" style="margin:16px 0 0;font-size:11px">App version: 6</p></div>
+</div>
+</section>
 </div></main>
 <div id="lb"><img alt="Enlarged activity photo"></div>
 <div id="toast" role="status"></div>
 
 <script>
-/* 1. Paste your Apps Script web app URL between the quotes (see setup steps). */
-var API="https://script.google.com/macros/s/AKfycbx_9mytY2h9lTl6XyCWbm_kUL_5jnWJ8mQ40UD3FvhnYbOi3krSv5_YBn8dxVUcxIEDGw/exec";
-
 var DIVS=[["AFD","Admin and Finance","#2b6a3b"],["FOD","Field Operations","#c8921a"],["PMED","Planning, Monitoring and Evaluation","#2f6fa8"],["RAED","Regional Agricultural Engineering","#a8432f"],["AMAD","Agribusiness and Marketing Assistance","#7a4fa0"],["REG","Regulatory","#4f8a8b"],["RES","Research","#c2547a"],["PRDP","PRDP RPCO I","#8a7a2b"]];
 var CATS=["Service delivery","Infrastructure","Training and capacity building","Financial and procurement","Planning and monitoring","Other"];
-var store=[],cats=CATS.slice(),names=[],imgs=[],doc=null,tab="dash",cm=new Date(),csel="";cm.setDate(1);
+var store=[],cats=CATS.slice(),names=[],secs={},imgs=[],doc=null,tab="dash",cm=new Date(),csel="";cm.setDate(1);
 function $(s){return document.querySelector(s)}
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function dv(c){return DIVS.filter(function(d){return d[0]==c})[0]||[c,c,"#888"]}
 function toast(m){var t=$("#toast");t.textContent=m;t.className="on";setTimeout(function(){t.className=""},2600)}
 function iso(y,m,d){return y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0")}
 function today(){var n=new Date();return iso(n.getFullYear(),n.getMonth(),n.getDate())}
-function connected(){return API.indexOf("PASTE")!==0}
 function thumb(id,w){return"https://drive.google.com/thumbnail?id="+encodeURIComponent(id)+"&sz=w"+w}
 
-function post(body){return fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body)}).then(function(r){return r.json()})}
-function refresh(){var b=$("#banner");
-if(!connected()){b.textContent="Not connected yet. Paste your Apps Script web app URL on the API line at the top of this file's script.";return Promise.resolve()}
-b.textContent="Loading highlights…";
-return fetch(API+"?action=list").then(function(r){return r.json()}).then(function(j){store=j.entries||[];(j.cats||[]).forEach(function(c){if(cats.indexOf(c)<0)cats.push(c)});names=j.names||[];b.textContent="";initAdds();dash();list()})
-.catch(function(){b.textContent="Could not load the data. Check the web app URL, and that the deployment's access is set to Anyone."})}
+function run(fn){var a=[].slice.call(arguments,1);return new Promise(function(res,rej){var r=google.script.run.withSuccessHandler(res).withFailureHandler(function(e){rej(new Error(e&&e.message?e.message:String(e)))});r[fn].apply(r,a)})}
+function refresh(){var b=$("#banner");b.textContent="Loading highlights…";
+return run("apiList").then(function(j){store=j.entries||[];(j.cats||[]).forEach(function(c){if(cats.indexOf(c)<0)cats.push(c)});names=j.names||[];secs=j.sections||{};b.textContent="";initAdds();secFill();dash();list();deckInfo()})
+.catch(function(e){b.textContent="Could not load the data: "+e.message})}
 
 function opts(sel,arr,all){sel.innerHTML=(all?'<option value="">All divisions</option>':"")+arr.map(function(a){return Array.isArray(a)?'<option value="'+a[0]+'">'+esc(a[1])+"</option>":"<option>"+esc(a)+"</option>"}).join("")}
 function fillSel(sel,arr,ph,al){var cur=sel.value;sel.innerHTML='<option value="">'+ph+"</option>"+arr.map(function(a){return"<option>"+esc(a)+"</option>"}).join("")+'<option value="__add__">'+al+"</option>";if(arr.indexOf(cur)>-1)sel.value=cur}
 function addable(sid,rid,iid,bid,arr,type,ph,al){var s=$("#"+sid),r=$("#"+rid),i=$("#"+iid);fillSel(s,arr,ph,al);
 s.onchange=function(){r.hidden=s.value!=="__add__";if(!r.hidden)i.focus()};
 i.onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();$("#"+bid).click()}};
-$("#"+bid).onclick=function(){var v=i.value.trim();if(!v)return;if(arr.indexOf(v)<0){arr.push(v);if(connected())post({action:"addList",type:type,value:v}).catch(function(){})}fillSel(s,arr,ph,al);s.value=v;i.value="";r.hidden=true}}
+$("#"+bid).onclick=function(){var v=i.value.trim();if(!v)return;if(arr.indexOf(v)<0){arr.push(v);run("apiAddList",type,v).catch(function(e){toast("Could not save the new "+(type==="cat"?"category":"name")+".")})}fillSel(s,arr,ph,al);s.value=v;i.value="";r.hidden=true}}
 function initAdds(){addable("fCat","aCat","nCat","bCat",cats,"cat","Select a category","+ Add new category");addable("fBy","aBy","nBy","bBy",names,"name","Select your name","+ Add new name")}
+function secFill(){var d=document.forms[0].division.value,s=$("#fSec");$("#aSec").hidden=true;
+if(!d){s.innerHTML='<option value="">Select a division first</option>';s.disabled=true;return}
+s.disabled=false;fillSel(s,secs[d]||[],"Select section / unit (optional)","+ Add new section / unit")}
+function secInit(){var s=$("#fSec"),r=$("#aSec"),i=$("#nSec");document.forms[0].division.onchange=secFill;
+s.onchange=function(){r.hidden=s.value!=="__add__";if(!r.hidden)i.focus()};
+i.onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();$("#bSec").click()}};
+$("#bSec").onclick=function(){var d=document.forms[0].division.value,v=i.value.trim();if(!d||!v)return;var a=secs[d]=secs[d]||[],m=a.filter(function(x){return x.toLowerCase()===v.toLowerCase()})[0];
+if(m)v=m;else{a.push(v);run("apiAddList","section:"+d,v).catch(function(){toast("Could not save the new section / unit.")})}
+fillSel(s,a,"Select section / unit (optional)","+ Add new section / unit");s.value=v;i.value="";r.hidden=true}}
 function setDates(){var t=today(),f=document.forms[0];f.from.value=t;f.to.value=t}
 
 function shrink(file){return new Promise(function(res,rej){var im=new Image(),u=URL.createObjectURL(file);im.onload=function(){var s=Math.min(1,1000/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);res(c.toDataURL("image/jpeg",.78))};im.onerror=function(){rej()};im.src=u})}
@@ -199,15 +230,15 @@ var l=d.slice().sort(function(a,b){return b.date.localeCompare(a.date)}).slice(0
 $("#latest").innerHTML=l.length?l.map(function(e){return'<div style="margin:0 0 10px"><b>'+esc(e.title)+'</b><div class="meta">'+esc(dv(e.division)[1])+" · "+esc(e.date)+"</div></div>"}).join(""):'<div class="empty">Nothing yet. Use Submit highlight to add the first one.</div>'}
 
 function list(){var dd=$("#lDiv").value,q=$("#lQ").value.toLowerCase();
-var r=store.filter(function(e){return(!dd||e.division===dd)&&(!q||(e.title+" "+e.summary).toLowerCase().indexOf(q)>-1)}).sort(function(a,b){return b.date.localeCompare(a.date)});
-$("#items").innerHTML=r.length?r.map(function(e){var x=dv(e.division);return'<article class="card" style="--c:'+x[2]+'"><div class="meta"><span class="tag">'+esc(x[0])+'</span><span class="tag">'+esc(e.category)+"</span>Submitted "+esc(e.date)+(e.from?" · Activity "+esc(e.from)+" to "+esc(e.to||e.from):"")+"</div><h3>"+esc(e.title)+"</h3><p>"+esc(e.summary)+"</p>"
+var r=store.filter(function(e){return(!dd||e.division===dd)&&(!q||(e.title+" "+e.summary+" "+(e.section||"")).toLowerCase().indexOf(q)>-1)}).sort(function(a,b){return b.date.localeCompare(a.date)});
+$("#items").innerHTML=r.length?r.map(function(e){var x=dv(e.division);return'<article class="card" style="--c:'+x[2]+'"><div class="meta"><span class="tag">'+esc(x[0])+'</span><span class="tag">'+esc(e.category)+"</span>"+(e.section?'<span class="tag">'+esc(e.section)+"</span>":"")+"Submitted "+esc(e.date)+(e.from?" · Activity "+esc(e.from)+" to "+esc(e.to||e.from):"")+"</div><h3>"+esc(e.title)+"</h3><p>"+esc(e.summary)+"</p>"
 +(e.imgs&&e.imgs.length?'<div class="thumbs" style="margin-top:10px">'+e.imgs.map(function(id){return'<img src="'+thumb(id,400)+'" data-big="'+thumb(id,1600)+'" alt="Activity photo">'}).join("")+"</div>":"")
 +(e.doc?'<a class="btn ghost docbtn" style="display:inline-block;text-decoration:none" target="_blank" rel="noopener" href="https://drive.google.com/file/d/'+encodeURIComponent(e.doc.id)+'/view">Open '+esc(e.doc.name)+"</a>":"")
 +'<div class="meta" style="margin-top:8px">Submitted by '+esc(e.by)+"</div></article>"}).join(""):'<div class="empty">No highlights match. Clear the search or pick another division.</div>'}
 
-function show(t){tab=t;["dash","submit","list"].forEach(function(s){$("#"+s).hidden=s!==t});
+function show(t){tab=t;["dash","submit","list","deck"].forEach(function(s){$("#"+s).hidden=s!==t});
 document.querySelectorAll("nav button").forEach(function(b){b.setAttribute("aria-selected",b.dataset.tab===t)});
-if(t==="dash")dash();if(t==="list")list();try{history.replaceState(null,"","#"+t)}catch(e){}}
+if(t==="dash")dash();if(t==="list")list();if(t==="deck"){deckInfo();deckUI()}try{history.replaceState(null,"","#"+t)}catch(e){}}
 
 function prog(p,label,busy){var w=$("#prog");if(p<0){w.hidden=true;return}w.hidden=false;var b=$("#progBar");b.style.width=(p*100)+"%";b.className=busy?"busy":"";$("#progTxt").textContent=label}
 function hint(m){m=m.toLowerCase();
@@ -221,12 +252,64 @@ function errR(m){var e=$("#subErr");e.textContent="";if(!m){e.hidden=true;return
 var t=document.createElement("b");t.textContent="Could not submit.";e.appendChild(t);
 var r=document.createElement("div");r.textContent="Reason: "+m;e.appendChild(r);
 var h=document.createElement("div");h.className="meta";h.textContent=hint(m);e.appendChild(h)}
-function send(o,onUp,onWait){return new Promise(function(res,rej){var x=new XMLHttpRequest();x.open("POST",API);x.setRequestHeader("Content-Type","text/plain;charset=utf-8");x.timeout=180000;
-x.upload.onprogress=function(e){if(e.lengthComputable)onUp(e.loaded/e.total)};x.upload.onload=onWait;
-x.onerror=function(){rej(new Error("Network error: could not reach the web app."))};x.ontimeout=function(){rej(new Error("Network error: the request timed out."))};
-x.onload=function(){try{res(JSON.parse(x.responseText))}catch(e){rej(new Error("The response was not JSON (status "+x.status+")."))}};x.send(JSON.stringify(o))})}
-function verify(id){return new Promise(function(r){setTimeout(r,3000)}).then(function(){return fetch(API+"?action=list")}).then(function(r){return r.json()}).then(function(j){return(j.entries||[]).some(function(e){return e.id===id})}).catch(function(){return false})}
-function init(){var f=document.forms[0];opts(f.division,DIVS);opts($("#lDiv"),DIVS,true);initAdds();
+/* ---------- PowerPoint ---------- */
+function fmtD(x){return new Date(x+"T00:00:00").toLocaleDateString("en-PH",{month:"short",day:"numeric",year:"numeric"})}
+function periodOf(e){var a=span(e);return a[0]===a[1]?fmtD(a[0]):fmtD(a[0])+" to "+fmtD(a[1])}
+function periodTxt(){var a=$("#dFrom").value,b=$("#dTo").value;return a&&b?fmtD(a)+" to "+fmtD(b):a?"From "+fmtD(a):b?"Up to "+fmtD(b):"All submitted highlights"}
+function trunc(t,n){t=String(t||"").replace(/\s+$/,"");if(t.length<=n)return t;var c=t.slice(0,n),i=c.lastIndexOf(" ");return(i>n*.6?c.slice(0,i):c)+"…"}
+function deckSel(){var a=$("#dFrom").value,b=$("#dTo").value,d=$("#dDiv").value;
+return store.filter(function(e){var s=span(e);return(!a||s[1]>=a)&&(!b||s[0]<=b)&&(!d||e.division===d)}).sort(function(p,q){var i=DIVS.findIndex(function(x){return x[0]===p.division}),j=DIVS.findIndex(function(x){return x[0]===q.division});return i-j||span(p)[0].localeCompare(span(q)[0])})}
+function deckInfo(){var r=deckSel(),n=new Set(r.map(function(e){return e.division})).size;
+$("#dInfo").textContent=r.length?r.length+" highlight"+(r.length>1?"s":"")+" from "+n+" division"+(n>1?"s":"")+" match. The deck will have "+(r.length+2+($("#dDiv").value?0:1))+" slides.":"No highlights match these dates. Try a wider period.";$("#dGo").disabled=!r.length}
+function fetchPhotos(ids,map,st){var ch=[];for(var i=0;i<ids.length;i+=4)ch.push(ids.slice(i,i+4));var done=0;
+return ch.reduce(function(p,c){return p.then(function(){dprog(.05+.55*done/ids.length,"Step 2 of 4: Fetching photos… "+done+" of "+ids.length,true);return run("apiPhotos",c,RT).then(function(o){return Promise.all(Object.keys(o).map(function(k){return new Promise(function(res){var im=new Image();im.onload=function(){map[k]={u:o[k],w:im.naturalWidth,h:im.naturalHeight};res()};im.onerror=res;im.src=o[k]})}))}).then(function(){done+=c.length})})},Promise.resolve())}
+function fit(m,x,y,w,h){var r=m.w/m.h,bw=w,bh=w/r;if(bh>h){bh=h;bw=h*r}return{data:m.u,x:x+(w-bw)/2,y:y+(h-bh)/2,w:bw,h:bh}}
+function build(r,len,photos){var P=new PptxGenJS();P.layout="LAYOUT_WIDE";P.title="Accomplishment Highlights";P.company="DA-RFO I";
+var G="2B6A3B",D="1C2A1F",M="5B6A5E",F="Calibri",s,per=periodTxt();
+s=P.addSlide();s.background={color:G};
+s.addText("Accomplishment Highlights",{x:.7,y:2.2,w:12,h:1.1,fontFace:F,fontSize:44,bold:true,color:"FFFFFF"});
+s.addText("DA-RFO I  ·  "+per,{x:.7,y:3.4,w:12,h:.6,fontFace:F,fontSize:20,color:"E6EEDC"});
+s.addShape(P.ShapeType.rect,{x:.7,y:4.3,w:1.6,h:.08,fill:{color:"C8921A"},line:{color:"C8921A"}});
+var cnt=DIVS.map(function(x){return r.filter(function(e){return e.division===x[0]}).length}),np=0;r.forEach(function(e){np+=(e.imgs||[]).filter(function(i){return photos[i]}).length});
+s=P.addSlide();s.background={color:"FFFFFF"};
+s.addText("Overview",{x:.6,y:.4,w:12,h:.7,fontFace:F,fontSize:30,bold:true,color:D});
+s.addChart(P.charts.BAR,[{name:"Highlights",labels:DIVS.map(function(x){return x[1]}),values:cnt}],{x:.6,y:1.3,w:8.2,h:5.6,barDir:"bar",catAxisOrientation:"maxMin",chartColors:[G],showValue:true,valAxisHidden:true,valGridLine:{style:"none"},catAxisLabelFontSize:12,dataLabelFontSize:12,showLegend:false});
+s.addText([{text:String(r.length),options:{fontSize:54,bold:true,color:G,breakLine:true}},{text:"highlights submitted",options:{fontSize:16,color:M,breakLine:true}},{text:" ",options:{fontSize:10,breakLine:true}},{text:String(cnt.filter(function(c){return c}).length)+" of "+DIVS.length,options:{fontSize:34,bold:true,color:G,breakLine:true}},{text:"divisions reporting",options:{fontSize:16,color:M}}],{x:9.3,y:1.6,w:3.6,h:4,fontFace:F,valign:"top"});
+r.forEach(function(e){var x=dv(e.division),c=x[2].replace("#",""),ph=(e.imgs||[]).filter(function(i){return photos[i]}).slice(0,3),t=trunc(e.summary,len);
+s=P.addSlide();s.background={color:"FFFFFF"};
+s.addShape(P.ShapeType.rect,{x:0,y:0,w:.35,h:7.5,fill:{color:c},line:{color:c}});
+s.addText(x[1].toUpperCase()+(e.section?"  ·  "+e.section:"")+"  ·  "+e.category,{x:.7,y:.35,w:12,h:.4,fontFace:F,fontSize:13,bold:true,color:c});
+s.addText(e.title,{x:.7,y:.75,w:12,h:1,fontFace:F,fontSize:26,bold:true,color:D,valign:"top",fit:"shrink"});
+s.addText("Activity: "+periodOf(e)+"   ·   Submitted by "+e.by,{x:.7,y:1.8,w:12,h:.4,fontFace:F,fontSize:13,color:M});
+s.addText(t,{x:.7,y:2.4,w:ph.length?6.9:12,h:4.5,fontFace:F,fontSize:t.length>900?11:t.length>500?13:16,color:D,valign:"top",fit:"shrink",paraSpaceAfter:6});
+var bx=ph.length===1?[[7.9,2.4,4.9,4.4]]:ph.length===2?[[7.9,2.4,4.9,2.15],[7.9,4.65,4.9,2.15]]:[[7.9,2.4,4.9,2.15],[7.9,4.65,2.4,2.15],[10.4,4.65,2.4,2.15]];
+ph.forEach(function(id,i){var b=bx[i];s.addImage(fit(photos[id],b[0],b[1],b[2],b[3]))})});
+if(!$("#dDiv").value){var none=DIVS.filter(function(x,i){return!cnt[i]});
+s=P.addSlide();s.background={color:"FFFFFF"};s.addText("Divisions with no submission in this period",{x:.6,y:.4,w:12,h:.7,fontFace:F,fontSize:28,bold:true,color:D});
+s.addText(none.length?none.map(function(x){return{text:x[1],options:{bullet:true,breakLine:true}}}):"All divisions submitted at least one highlight.",{x:.8,y:1.4,w:11,h:5,fontFace:F,fontSize:20,color:D,valign:"top"})}
+return P}
+var RT="",dlast=[0,"",false],dt0=0;
+function deckUI(){$("#deckLock").hidden=!!RT;$("#deckBody").hidden=!RT}
+function unlockDeck(){var v=$("#dPass").value,m=$("#dLockMsg"),b=$("#dUnlock");if(!v)return;b.disabled=true;m.textContent="Checking…";
+run("apiUnlock",v).then(function(o){if(o&&o.ok){RT=o.token;$("#dPass").value="";m.textContent="";deckUI()}else m.textContent=(o&&o.msg)||"Incorrect passcode."})
+.catch(function(e){m.textContent="Could not check the passcode: "+e.message}).then(function(){b.disabled=false})}
+function dprog(p,label,busy){dlast=[p,label,busy];var w=$("#dBarW");if(p<0){w.hidden=true;$("#dProg").textContent=label||"";return}w.hidden=false;var b=$("#dBar");b.style.width=(p*100)+"%";b.className=busy?"busy":"";$("#dProg").textContent=label+(busy?" ("+Math.round((Date.now()-dt0)/1000)+"s)":"")}
+function genDeck(){var r=deckSel();if(!r.length)return;var btn=$("#dGo"),lk=$("#dLinks"),tm;lk.textContent="";dt0=Date.now();
+btn.disabled=true;btn.textContent="Generating…";tm=setInterval(function(){if(dlast[0]>=0&&dlast[2])dprog(dlast[0],dlast[1],true)},1000);
+function fin(){clearInterval(tm);btn.disabled=false;btn.textContent="Generate PowerPoint"}
+function fail(m){dprog(-1,m);fin();if(/not authorized/i.test(m)){RT="";deckUI();$("#dLockMsg").textContent="Your session ended. Enter the passcode again."}}
+dprog(.03,"Step 1 of 4: Preparing the PowerPoint tool…",true);
+loadPptx(function(ok){if(!ok){fail("The PowerPoint tool could not be downloaded. Your network may be blocking cdn.jsdelivr.net, unpkg.com and cdnjs.cloudflare.com. Ask your IT office to allow one of them, or try another network.");return}
+var ids=[],photos={},name="Accomplishment Highlights "+today()+".pptx";
+if($("#dPhotos").checked)r.forEach(function(e){(e.imgs||[]).slice(0,3).forEach(function(i){ids.push(i)})});
+dprog(.05,"Step 2 of 4: "+(ids.length?"Fetching photos… 0 of "+ids.length:"No photos to fetch"),true);
+fetchPhotos(ids,photos).then(function(){dprog(.7,"Step 3 of 4: Building the slides…",true);return new Promise(function(res){setTimeout(res,60)}).then(function(){return build(r,+$("#dLen").value,photos).write({outputType:"base64"})})})
+.then(function(b64){var by=atob(b64),u=new Uint8Array(by.length);for(var i=0;i<by.length;i++)u[i]=by.charCodeAt(i);
+var a=document.createElement("a");a.className="btn";a.style.textDecoration="none";a.textContent="Download "+name;a.href=URL.createObjectURL(new Blob([u],{type:"application/vnd.openxmlformats-officedocument.presentationml.presentation"}));a.download=name;lk.appendChild(a);
+dprog(.85,"Step 4 of 4: Your PowerPoint is ready to download. Saving a copy to Google Drive…",true);
+return run("apiSaveDeck",name,b64,RT).then(function(o){var d=document.createElement("a");d.className="btn ghost";d.style.textDecoration="none";d.textContent="Open the copy in Google Drive";d.href=o.url;d.target="_blank";d.rel="noopener";lk.appendChild(d);dprog(1,"Done. The deck is ready, and a copy is saved in the highlights folder in Google Drive.",false)}).catch(function(){dprog(1,"Your PowerPoint is ready. The copy could not be saved to Drive, so use the Download button.",false)})})
+.then(fin).catch(function(e){fail("Could not create the PowerPoint: "+(e&&e.message?e.message:e))})})}
+function init(){var f=document.forms[0];opts(f.division,DIVS);opts($("#lDiv"),DIVS,true);opts($("#dDiv"),DIVS,true);initAdds();secInit();secFill();
 var y=new Date().getFullYear(),ys=[];for(var i=y;i>=y-3;i--)ys.push(String(i));
 $("#fYear").innerHTML=ys.map(function(v){return"<option>"+v+"</option>"}).join("");setDates();
 document.querySelectorAll("nav button").forEach(function(b){b.onclick=function(){show(b.dataset.tab)}});
@@ -242,21 +325,21 @@ var r=new FileReader();r.onload=function(){doc={name:x.name,type:x.type||"applic
 $("#prev").onclick=function(e){var i=e.target.dataset&&e.target.dataset.i;if(i!=null&&i!==""){imgs.splice(+i,1);prevR()}};
 $("#items").onclick=function(e){var t=e.target;if(t.tagName==="IMG"&&t.dataset.big){$("#lb img").src=t.dataset.big;$("#lb").className="on"}};
 $("#lb").onclick=function(){this.className=""};
-$("#csv").onclick=function(){var h=["division","category","title","date","from","to","summary","by"];
+$("#dFrom").onchange=$("#dTo").onchange=$("#dDiv").onchange=deckInfo;$("#dGo").onclick=genDeck;$("#dUnlock").onclick=unlockDeck;$("#dPass").onkeydown=function(e){if(e.key==="Enter")unlockDeck()};
+$("#csv").onclick=function(){var h=["division","section","category","title","date","from","to","summary","by"];
 var c=[h.join(",")].concat(store.map(function(e){return h.map(function(k){return'"'+String(e[k]==null?"":e[k]).replace(/"/g,'""')+'"'}).join(",")})).join("\n");
 var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([c],{type:"text/csv"}));a.download="accomplishment-highlights.csv";a.click()};
-f.onsubmit=function(ev){ev.preventDefault();if(!connected()){toast("Connect the web app URL first.");return}
+f.onsubmit=function(ev){ev.preventDefault();
 var o={};new FormData(f).forEach(function(v,k){o[k]=v});
-if(!o.category||o.category==="__add__"||!o.by||o.by==="__add__"){toast("Choose a category and your name, or add a new one.");return}
+if(!o.category||o.category==="__add__"||!o.by||o.by==="__add__"||o.section==="__add__"){toast("Choose a category and your name, or add a new one.");return}
 if(o.to<o.from){toast("The activity period ends before it starts.");return}
 o.action="submit";o.id="h"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);o.date=today();o.imgs=imgs.map(function(m){return{name:m.name,type:"image/jpeg",data:m.data}});o.doc=doc;
-var b=f.querySelector("button[type=submit]");b.disabled=true;b.textContent="Submitting…";errR("");prog(0,"Preparing…");
-send(o,function(p){prog(p,"Uploading… "+Math.round(p*100)+"%")},function(){prog(1,"Saving to Google Drive and the Sheet… please wait",true)})
-.catch(function(err){if(!/network/i.test(err.message))throw err;prog(1,"Checking whether the entry was saved…",true);return verify(o.id).then(function(ok){if(ok)return{ok:true};throw err})})
-.then(function(j){if(!j||!j.ok)throw new Error(j&&j.error?"Server: "+j.error:"The web app did not accept the entry.");prog(1,"Done");f.reset();imgs=[];doc=null;setDates();prevR();initAdds();toast("Highlight submitted");return refresh().then(function(){show("dash")})})
-.catch(function(err){prog(-1);errR(err&&err.message?err.message:"No response from the web app.");console.error(err)})
+var b=f.querySelector("button[type=submit]");b.disabled=true;b.textContent="Submitting…";errR("");
+var t0=Date.now(),msg=function(){prog(1,"Uploading and saving to Google Drive and the Sheet… "+Math.round((Date.now()-t0)/1000)+"s. Please keep this page open.",true)},tm=setInterval(msg,500);msg();
+run("apiSubmit",o).then(function(j){if(!j||!j.ok)throw new Error("The script did not accept the entry.");clearInterval(tm);prog(1,"Done");f.reset();imgs=[];doc=null;setDates();prevR();initAdds();secFill();toast("Highlight submitted");return refresh().then(function(){show("dash")})})
+.catch(function(err){clearInterval(tm);prog(-1);errR(err&&err.message?err.message:"No response from the script.");console.error(err)})
 .then(function(){b.disabled=false;b.textContent="Submit highlight";setTimeout(function(){if(!$("#subErr").textContent)prog(-1)},900)})};
-var h=location.hash.slice(1);show(["dash","submit","list"].indexOf(h)>-1?h:"dash");refresh()}
+var h=location.hash.slice(1);show(["dash","submit","list","deck"].indexOf(h)>-1?h:"dash");refresh()}
 init();
 </script>
 </body>
